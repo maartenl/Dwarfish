@@ -1,0 +1,7 @@
+## Interface: 70300
+## Title: Dwarfish
+## Notes: Makes you speak in a Dwarfish accent
+## Version: 0.0.1
+## Author: Durkin
+
+Dwarfish.lua
