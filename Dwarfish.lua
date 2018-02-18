@@ -11,10 +11,17 @@ Dwarfish.debug = false
 	--	or the word can be different parts of speech and 	--
 	--	therefore not really apply			 	--
 	------------------------------------------------------------------
+-- getting -> gettin'
+-- nothing -> nothin'
+-- opening -> openin'
+-- It is -> 'Tis
 local translation = {
+    ["is"]	=	"be",
+    ["it is"]	=	"'tis",
     ["good"]	=	"gud",
+    ["of"]	=	"o'",
     ["the"]	=	"tha",
-    ["to"]	=	"tu",
+    ["to"]	=	"ta",
     ["back"]	=	"beck",
     ["yes"]		=	"aye",
     ["a baby"]	=	"a wee one",
@@ -24,14 +31,7 @@ local translation = {
     ["kid"]		=	"bairn",
     ["children"]	=	"bairn",
     ["kids"]	=	"bairn",
-    ["moron"]	=	"bampot",
-    ["splendid"]	=	"barry",
-    ["drink"]	=	"bewy",
-    ["alcohol"]	=	"bewy",
     ["drunk"]	=	"hammered",
-    ["cold"]	=	"cauld",
-    ["do"]		=	"de",
-    
     ["understand"]	=	"ken",
     ["dog"]		=	"dug",
     ["idiot"]	=	"idjit",
@@ -41,6 +41,8 @@ local translation = {
     ["do not"]	=	"dunnae",
     ["cannot"]	=	"cannae",
     ["can't"]	=	"cannae",
+    ["can"]="kin",
+    ["couldn't"]= "couldnae",
 	
     ["shit"]	=	"shite",
     ["fucking"]	=	"bloody",
@@ -66,25 +68,26 @@ local translation = {
     ["mother"]	=	"mammy",
     
     ["night"]	=	"nait",
+    ["come on"]	=	"c'mon",
     ["a little"]	=	"a wee bit",
     ["goodbye"]	=	"be good",
     ["good bye"]	=	"be good",
     
+    ["here"] = "'ere",
     ["no"] = "nae",
     ["isn't"] = "ain't",
     ["about"] = "aboot",
     ["around"]="'roon",
     ["before"]="'fore",
     ["between"]="a'tween",
-    ["can"]="kin",
-    ["can't"] = "cannae",
-    ["couldn't"]= "couldnae",
     ["dead"]="deid",
     ["gone"]="guan",
     ["was"]="wer",
     ["understand"]="unnerstan'",
+    ["my"]		=	"me",
     ["you"]		=	"ye",
     ["your"]	=	"yer",
+    ["you're"]	=	"yer",
     ["bye"]		=	"keep yer feet on tha ground",
 }
 Dwarfish.translation = translation
@@ -108,12 +111,23 @@ function changeWord(word)
         if key:upper() == word:upper() then
             newWord = value
         end
+    end
+    if word ~= "I" and word:sub(1,1):upper() == word:sub(1,1) then
+        newWord = newWord:sub(1,1):upper() .. newWord:sub(2)
     end   
+    if word:upper() == word then
+        -- keep all caps
+        newWord = newWord:upper()
+    end
     return newWord
 end
 
 function translate(msg)
     log("translate")
+    msg = msg:gsub("ing ","in' ")
+    msg = msg:gsub("ing,","in',")
+    msg = msg:gsub("ing!","in'!")
+    msg = msg:gsub("ing%?","in'?")
     local tbl = { strsplit(" ", msg) }
     local newmsg = ""
     for key,value in pairs(tbl) do 
@@ -128,8 +142,7 @@ local Send = SendChatMessage
 function SendChatMessage(msg,chan,...)
     chan=chan:upper();--    Convert to make checks easier (channel is case-insensitive)
     log("local SendChatMessage " .. msg .. chan);
-    -- CHANNEL and YELL
-    if chan=="SAY" then
+    if chan=="SAY" or chan=="YELL" or chan=="CHANNEL" then
         Send(translate(msg),chan,...);
     else
         Send(msg,chan,...);
