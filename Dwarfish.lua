@@ -124,16 +124,23 @@ end
 
 function translate(msg)
     log("translate")
+    msg = msg:gsub("!"," ! ")
+    msg = msg:gsub("%?"," ? ")
+    msg = msg:gsub(":"," : ")
+    msg = msg:gsub(","," , ")
+    msg = msg:gsub("%."," . ")
     msg = msg:gsub("ing ","in' ")
-    msg = msg:gsub("ing,","in',")
-    msg = msg:gsub("ing!","in'!")
-    msg = msg:gsub("ing%?","in'?")
     local tbl = { strsplit(" ", msg) }
     local newmsg = ""
     for key,value in pairs(tbl) do 
 --        print(key,value)
         newmsg = newmsg .. changeWord(value) .. " "
     end
+    newmsg = newmsg:gsub(" ! ","!")
+    newmsg = newmsg:gsub(" %? ","?")
+    newmsg = newmsg:gsub(" : ",":")
+    newmsg = newmsg:gsub(" , ",",")
+    newmsg = newmsg:gsub(" %. ",".")
     return newmsg
 end
 
