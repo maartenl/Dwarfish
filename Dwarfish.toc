@@ -2,7 +2,7 @@
 ## X-Min-Interface: 80000
 ## Title: Dwarfish
 ## Notes: Makes you speak in a Dwarfish accent
-## Version: 0.0.2
+## Version: 0.0.3
 ## Author: Durkin
 
 Dwarfish.lua
